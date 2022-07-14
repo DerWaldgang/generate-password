@@ -1,61 +1,44 @@
-function generatePassword(length, level, count = 1) { // ПАРОЛИ НЕ СОВСЕМ РАНДОМНЫЕ ТАК КАК digit>alphabet>symbol
+function generatePassword(length, level, count = 1) {
 
   const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const digits = '0123456789';
   const symbols = '!#$%&()*+,-./:;<=>?@[]^_{|}~';
-  let newPasswordEasy = []
+  let newPassword = []
 
-
+  // Создает рандомное слово и 'push-ит' его в массив newPassword
   for (let i = 0; i < count; i++) {
+    let word = ''
+    // Создает рандомные символы и 'добавляет +=' их к строке word
     if (level === 'easy') {
       for (let i = 0; i < length; i++) {
-        const randomAlphabet = alphabet.charAt([Math.floor(Math.random() * alphabet.length)]) // я умею брать один случайный символ 
-        newPasswordEasy.push(randomAlphabet) // newpassword будет строкой 
+        const randomAlphabet = alphabet.charAt([Math.floor(Math.random() * alphabet.length)])
+        word += randomAlphabet // я умею брать один случайный символ
+        // word = word.join(' ') 
+        // newpassword будет строкой 
       }
     } else if (level === 'medium') {
-      for (let i = 0; i < length; i++) {
+      for (let i = 0; i < length; i++) {  // ЗДЕСЬ МОЖНО БЫЛО ДЛИНУ ДЕЛИТЬ НА 2 !
         const randomAlphDig = alphabet.concat('', digits)
         let one_symbol = randomAlphDig.charAt([Math.floor(Math.random() * randomAlphDig.length)])
-        newPasswordEasy.push(one_symbol)  // newpassword будет массивом
+        word += one_symbol
+        // newPasswordEasy.push(one_symbol)  // newpassword будет массивом
       }
     } else if (level === 'hard') {
-      for (let i = 0; i < length; i++) {
+      for (let i = 0; i < length; i++) { // ЗДЕСЬ МОЖНО БЫЛО ДЛИНУ ДЕЛИТЬ НА 3 !
         const randomAlphDigSymb = alphabet.concat('', digits, symbols)
         let one_symbol = randomAlphDigSymb.charAt([Math.floor(Math.random() * randomAlphDigSymb.length)])
-        newPasswordEasy.push(one_symbol)  // newpassword будет массивом
+        word += one_symbol  // newpassword будет массивом
       }
     }
-  }
-
-  let manyPasswords = []
-
-  if (count !== 1) {
-    for (let i = 0; i < count; i++) {
-      let arr = ''
-      for (let j = 0; j < length; j++) {
-        arr += newPasswordEasy[0]
-        newPasswordEasy.splice(0, 1)
-      }
-      manyPasswords.push(arr) // ['HOMhg', 'pTTaz'] 
+    // Проверяет есть ли в массиве уже такой пароль, если есть, то генерирует новый
+    if (newPassword.includes(word)) {
+      i--
+    } else {
+      newPassword.push(word)
     }
-
   }
-
-  return count > 1 ? manyPasswords : newPasswordEasy.join('')
+  return count > 1 ? newPassword : newPassword.join(' ')
 }
-// console.log(newPassword) // Я добавляю 10 строчек, так как count 2 
-// console.log(typeof newPassword) //.join('')
 
-
-console.log(generatePassword(10, 'easy',10 ))
-// generatePassword(10, 'hard')
-
-
-/*Данная подзадача имеет высокий уровень сложности.
-Её нужно решить самостоятельно, без чьей-либо помощи. 
-Если найти решение не удаётся, то разрешается не выполнять её.
-
-Если передан третий параметр, то есть малая вероятность, что пароли будут дублироваться. 
-Чем короче пароль, тем больше эта вероятность.
-Доработай добавление паролей в массив так, чтобы перед каждым добавлением проводилась проверка, 
-существует ли такой элемент. Если такой пароль уже есть в массиве, то нужно сгенирировать новый.*/
+// ВСЕ пароли получились рандомные ( пароль easy содержит всего 52 буквы, ни одна не повторяется)
+console.log(generatePassword(10, 'hard', 40)) // 
